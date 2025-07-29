@@ -1,3 +1,7 @@
-<h1>Test Page</h1>
-<p>This is a test.</p>
-<img src=x onerror=alert('XSS')>
+<h1>Image Test</h1>
+<p>Below is an SVG image.</p>
+
+<svg xmlns="http://www.w3.org/2000/svg" onload="alert('XSS from SVG')">
+    <rect width="100%" height="100%" fill="green"/>
+    <text x="50" y="50" font-size="20" fill="white">SVG Loaded</text>
+</svg>
